@@ -4,10 +4,10 @@ import joblib
 from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Load the trained model
-model = joblib.load('Customer_Sentiment_Model.pkl')
+model = joblib.load('Customer Sentiment Analysis\Customer_Sentiment_Model.pkl')
 
 # Load training data
-data = pd.read_csv("customer_sentiment_data.csv")
+data = pd.read_csv("Customer Sentiment Analysis\customer_sentiment_data.csv")
 
 # Clean and preprocess text (reviewText column)
 data["Cleaned Review"] = data["reviewText"].str.lower().replace("[^a-zA-Z0-9 ]", "", regex=True)
@@ -60,4 +60,4 @@ def predict_sentiment():
     return jsonify(output)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=4000)
