@@ -1,0 +1,14 @@
+{
+    "reviews": [
+        "The Boat Atom 81 Earbuds have taken my music listening experience to new heights, and I couldn't be more impressed. These earbuds deliver on all fronts – from sound quality and comfort to design and functionality.",
+        "I have purchased this product just three months before. In the first month itself the left Airdopes given distorted noise.",
+        "The boAt Airdopes Atom 81 True Wireless Earbuds have some good features, and also have a few drawbacks. Overall, this is an average choice for those looking for affordable wireless earbuds."
+    ],
+    "product_ratings": [5,2,1],
+    "descriptions": [
+        "Amazing product, highly recommended.",
+        "Average product, meets expectations.",
+        "Terrible product, avoid at all costs."
+    ],
+    "product_ids": ["12345", "67890", "54321"]
+}
