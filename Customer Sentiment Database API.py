@@ -39,7 +39,7 @@ conn = connect_to_database(db_config)
 model = joblib.load('/app/Customer_Sentiment_Model.pkl')
 vectorizer = joblib.load('/app/TFIDF_Vectorizer.pkl')
 
-@app.route('/predict_sales/', methods=['GET'])
+@app.route('/predict/', methods=['GET'])
 def predict_sales():
     user_id = request.args.get('userId')
     if not user_id:
