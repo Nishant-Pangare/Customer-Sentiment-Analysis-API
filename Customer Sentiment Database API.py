@@ -36,8 +36,8 @@ db_config = mysql_config  # Change to mysql_config for MySQL
 conn = connect_to_database(db_config)
 
 # Load the model and vectorizer
-model = joblib.load('Customer Sentiment Analysis/Customer Sentiment/Customer_Sentiment_Model.pkl')
-vectorizer = joblib.load('Customer Sentiment Analysis/Customer Sentiment/TFIDF_Vectorizer.pkl')
+model = joblib.load('/app/Customer_Sentiment_Model.pkl')
+vectorizer = joblib.load('/app/TFIDF_Vectorizer.pkl')
 
 @app.route('/predict_sales/', methods=['GET'])
 def predict_sales():
