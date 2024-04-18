@@ -14,7 +14,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 EXPOSE 4000
 
 # Define environment variable
-ENV FLASK_APP=Customer Sentiment Database API.py
+ENV FLASK_APP="Customer Sentiment Database API.py"
 
 # Run the Flask API using the python command
 CMD ["python", "-m", "flask", "run", "--host=0.0.0.0", "--port=4000"]
