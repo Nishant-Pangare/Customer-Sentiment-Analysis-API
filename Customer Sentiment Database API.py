@@ -17,8 +17,8 @@ mysql_config = {
 app = Flask(__name__)
 
 # Load the model and vectorizer
-model = joblib.load('Customer Sentiment Analysis/Customer Sentiment/Customer_Sentiment_Model.pkl')
-vectorizer = joblib.load('Customer Sentiment Analysis/Customer Sentiment/TFIDF_Vectorizer.pkl')
+model = joblib.load('/app/Customer_Sentiment_Model.pkl')
+vectorizer = joblib.load('/app/TFIDF_Vectorizer.pkl')
 
 @app.route('/predict/', methods=['GET'])
 def predict_sales():
