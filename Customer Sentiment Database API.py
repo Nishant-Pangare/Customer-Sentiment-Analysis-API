@@ -3,14 +3,25 @@ from flask import Flask, jsonify, request
 import mysql.connector
 import joblib
 
+# UAE Staging Database Configs
 # Database Configuration for MySQL
+# mysql_config = {
+#     'dialect': 'mysql',
+#     'host': 'uae-staging.c5ekgugckxnm.ap-south-1.rds.amazonaws.com',
+#     'port': '3306',
+#     'user': 'admin',
+#     'password': 'LlTQ7RnClHM15xcji0q6',
+#     'database': 'iceipts_apiserver'
+# }
+
+# ICeipts India Database Configs
 mysql_config = {
     'dialect': 'mysql',
-    'host': 'uae-staging.c5ekgugckxnm.ap-south-1.rds.amazonaws.com',
+    'host': 'iceipts-db-2023.c8ajg3wl9b2r.ap-south-1.rds.amazonaws.com',
     'port': '3306',
     'user': 'admin',
-    'password': 'LlTQ7RnClHM15xcji0q6',
-    'database': 'iceipts_apiserver'
+    'password': 'iceipts2023',
+    'database': 'iceipts_inventory'
 }
 
 app = Flask(__name__)
@@ -35,8 +46,8 @@ db_config = mysql_config  # Change to mysql_config for MySQL
 conn = connect_to_database(db_config)
 
 # Load the model and vectorizer
-model = joblib.load('/app/Customer_Sentiment_Model.pkl')
-vectorizer = joblib.load('/app/TFIDF_Vectorizer.pkl')
+model = joblib.load('Customer Sentiment Analysis/Customer Sentiment/Customer_Sentiment_Model.pkl')
+vectorizer = joblib.load('Customer Sentiment Analysis/Customer Sentiment/TFIDF_Vectorizer.pkl')
 
 @app.route('/predict/', methods=['GET'])
 def predict_sales():
@@ -62,6 +73,8 @@ def predict_sales():
     cursor.execute(query)
     data = cursor.fetchall()
     cursor.close()
+
+    print(data)
     
     # Check if data is available
     if not data:
@@ -149,3 +162,4 @@ def predict_sales():
 
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
+
