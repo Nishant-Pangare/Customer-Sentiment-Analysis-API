@@ -1,53 +1,24 @@
 import pandas as pd
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, make_response
 import mysql.connector
 import joblib
 
 # UAE Staging Database Configs
 # Database Configuration for MySQL
-# mysql_config = {
-#     'dialect': 'mysql',
-#     'host': 'uae-staging.c5ekgugckxnm.ap-south-1.rds.amazonaws.com',
-#     'port': '3306',
-#     'user': 'admin',
-#     'password': 'LlTQ7RnClHM15xcji0q6',
-#     'database': 'iceipts_apiserver'
-# }
-
-# ICeipts India Database Configs
 mysql_config = {
     'dialect': 'mysql',
-    'host': 'iceipts-db-2023.c8ajg3wl9b2r.ap-south-1.rds.amazonaws.com',
+    'host': 'uae-staging.c5ekgugckxnm.ap-south-1.rds.amazonaws.com',
     'port': '3306',
     'user': 'admin',
-    'password': 'iceipts2023',
-    'database': 'iceipts_inventory'
+    'password': 'LlTQ7RnClHM15xcji0q6',
+    'database': 'iceipts_apiserver'
 }
 
 app = Flask(__name__)
 
-# Connect to the MySQL database
-def connect_to_database(config):
-    if config['dialect'] == 'mysql':
-        return mysql.connector.connect(
-            host=config['host'],
-            port=config['port'],
-            user=config['user'],
-            password=config['password'],
-            database=config['database']
-        )
-    else:
-        raise ValueError("Unsupported database dialect")
-
-# Choose the appropriate database configuration
-db_config = mysql_config  # Change to mysql_config for MySQL
-
-# Connect to the database
-conn = connect_to_database(db_config)
-
 # Load the model and vectorizer
-model = joblib.load('/app/Customer_Sentiment_Model.pkl')
-vectorizer = joblib.load('/app/TFIDF_Vectorizer.pkl')
+model = joblib.load('Customer Sentiment Analysis/Customer Sentiment/Customer_Sentiment_Model.pkl')
+vectorizer = joblib.load('Customer Sentiment Analysis/Customer Sentiment/TFIDF_Vectorizer.pkl')
 
 @app.route('/predict/', methods=['GET'])
 def predict_sales():
@@ -56,6 +27,15 @@ def predict_sales():
 
     print("User ID:", user_id)
     print("Product ID:", product_id)
+    
+    # Connect to the MySQL database
+    conn = mysql.connector.connect(
+        host=mysql_config['host'],
+        port=mysql_config['port'],
+        user=mysql_config['user'],
+        password=mysql_config['password'],
+        database=mysql_config['database']
+    )
     
     # Both userId and productId are provided
     if user_id and product_id:
@@ -116,7 +96,8 @@ def predict_sales():
         for row in data:
             product_id = str(row[0], 'utf-8')
             product_name = str(row[1])
-            review = str(row[5]).lower() if row[5] else ""  
+            review = str(row[5]).lower() if row[5] else ""
+              
 
             if product_id not in products:
                 products[product_id] = {
@@ -158,8 +139,16 @@ def predict_sales():
             }
             response['products'].append(product)
 
-    return jsonify(response)
+    # Close the database connection
+    conn.close()
+
+    # Prevent caching of responses
+    response = make_response(jsonify(response))
+    response.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate'
+    response.headers['Pragma'] = 'no-cache'
+    response.headers['Expires'] = '0'
+
+    return response
 
 if __name__ == '__main__':
     app.run(debug=True, port=4000)
-
